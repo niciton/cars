@@ -1,0 +1,72 @@
+*{
+  box-sizing: border-box;
+
+  color: inherit;
+
+  line-height: inherit;
+
+  outline: none;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+
+  font-size: 15px;
+  font-family: sans-serif;
+  line-height: 120%;
+}
+
+a {
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+button,
+svg,
+a {
+  transition: .3s;
+}
+
+h1 {
+  margin: 0;
+
+  font-size: 32px;
+  font-weight: 700;
+
+  color: var(--black);
+}
+
+.page-container {
+  margin-top: 32px;
+  margin-bottom: 45px;
+}
+
+.container {
+  width: 1184px;
+
+  padding: 0 30px;
+  margin: 0 auto;
+}
+
+.load-screen {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+
+  background: var(--white-45);
+
+  opacity: 0;
+  pointer-events: none;
+
+  &.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+}

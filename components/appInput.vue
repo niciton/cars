@@ -1,6 +1,6 @@
 <template>
   <div :class="['app-input', {icon}]" :style="width ? `--input-width: ${width}px` : null">
-    <input :type :name :placeholder @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)" class="app-input__input" />
+    <input :type="type" :name="name" :placeholder="placeholder" :value="modelValue" @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)" class="app-input__input" />
     <button v-if="icon" class="app-input__icon">
       <icons-main :id="icon" :size="24" />
     </button>

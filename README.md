@@ -1,3 +1,11 @@
+для старта:
+
+```bash
+npm i
+npm run dev
+```
+port: [http://localhost:3000/](http://localhost:3000/)
+
 # Nuxt 3 Minimal Starter
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.

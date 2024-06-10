@@ -19,7 +19,6 @@ langArr.forEach((langName) => {
     title: langName,
     imgSrc: `/img/${langName}.png`,
   });
-  console.log(langsArr[0]);
 });
 
 function seetNewLang(event: TSelectItem) {

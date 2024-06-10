@@ -18,7 +18,7 @@
           <span>
             {{ text.prePage }}
           </span>
-          <app-select :min-width-text="20" :items="[{
+          <app-select @select_change="setPrePage" :min-width-text="20" :items="[{
             id: 20,
             title: '20',
           },
@@ -53,9 +53,12 @@
 import type { TApiCarsResponse, TProduct } from '~/types/api/cars';
 import type { TPaginationEmit } from '~/components/pagination.vue';
 import { useLangStore } from "@/store/lang";
+import type { TSelectItem } from '~/components/appSelect.vue';
 
 const { langObj, addListener } = useLangStore();
 const router = useRouter();
+
+const searchQuery = defineModel({ default: "" });
 
 let text = ref(langObj.pages.home);
 
@@ -69,31 +72,29 @@ let paginationParam = toRef({
   lastPage: 1,
 });
 
-const searchQuery = defineModel({ default: "" });
-
 let isLoad: Ref<boolean> = ref(false);
 
-function handlePagge({ page }: TPaginationEmit) {
-  paginationParam.value.activePage = page;
-  console.log(page);
-
-  if (page > 1) searchParams.set("page", String(page));
-  else searchParams.delete("page")
-
-
-  setContent();
-}
-
-console.log(router.currentRoute.value);
 const searchParams = new URLSearchParams(router.currentRoute.value.fullPath.split("?")[1]);
 const getUrl = (path: string) => `${path}${searchParams.size ? `?${searchParams.toString()}` : ''}`;
 
 if (!searchParams.has("per_page")) searchParams.set("per_page", String(paginationParam.value.prePage));
 if (!searchParams.has("page")) searchParams.set("page", String(paginationParam.value.activePage));
 
+function handlePagge({ page }: TPaginationEmit) {
+  paginationParam.value.activePage = page;
 
-console.log(decodeURIComponent(getUrl("https://api.caiman-app.de/api/cars-test")));
-console.log(router.currentRoute.value.fullPath.split("?")[0]);
+  if (page > 1) searchParams.set("page", String(page));
+  else searchParams.delete("page")
+
+  setContent();
+}
+
+function setPrePage(event: TSelectItem) {
+  if (event.id !== 20) searchParams.set("per_page", String(event.id));
+  else searchParams.delete("per_page")
+
+  setContent();
+}
 
 async function setContent() {
   isLoad.value = true;
@@ -115,7 +116,6 @@ async function setContent() {
   paginationParam.value.activePage = res?.meta.current_page || 1;
   paginationParam.value.lastPage = res?.meta.last_page || 1;
 
-  console.log({...(data.data.value as object)});
 
   isLoad.value = false;
  

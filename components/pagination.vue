@@ -5,7 +5,7 @@
     </div>
 
     <div class="pagination__contros">
-      <a :href="`?page=${reactiveProps.activePage - 1}`" :class="['pagination__prev pagination__link', {disable: reactiveProps.activePage >= 1}]">
+      <a :href="`?page=${reactiveProps.activePage - 1}`" :class="['pagination__prev pagination__link', {disable: disablePrev}]">
         <icons-main id="arrow" :size="24" />
       </a>
 
@@ -21,7 +21,7 @@
         {{ reactiveProps.lastPage }}
       </div>
 
-      <a :href="`?page=${activePage + 1}`" :class="['pagination__next pagination__link', {disable: reactiveProps.activePage > reactiveProps.lastPage}]">
+      <a :href="`?page=${activePage + 1}`" :class="['pagination__next pagination__link', {disable: disableNext}]">
         <icons-main id="arrow" :size="24" />
       </a>
     </div>
@@ -42,7 +42,11 @@ const props = defineProps<{
   amountProduct: number,
 }>();
 
+
 const reactiveProps = computed(() => props);
+
+const disablePrev = computed(() => reactiveProps.value.activePage <= 1);
+const disableNext = computed(() => reactiveProps.value.activePage > reactiveProps.value.lastPage -1);
 
 export type TPaginationEmit = {
   page: number,
@@ -65,7 +69,6 @@ function handleClick(event: Event) {
 }
 
 addListener((newText: Ref) => {
-  console.log(newText.value.components.pagination);
   text.value = newText.value.components.pagination;
 });
 </script>

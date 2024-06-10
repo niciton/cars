@@ -4,7 +4,7 @@
       {{ text.text(reactiveProps.prePage, reactiveProps.amountProduct) }}
     </div>
 
-    <div class="pagination__contros">
+    <div class="pagination__controls">
       <a :href="`?page=${reactiveProps.activePage - 1}`" :class="['pagination__prev pagination__link', {disable: disablePrev}]">
         <icons-main id="arrow" :size="24" />
       </a>
@@ -53,7 +53,7 @@ export type TPaginationEmit = {
 }
 
 const emit = defineEmits<{
-  (name: "cange_page", value: TPaginationEmit): void,
+  (name: "change_page", value: TPaginationEmit): void,
 }>();
 
 function handleClick(event: Event) {
@@ -65,7 +65,7 @@ function handleClick(event: Event) {
   if (linkTarget.classList.contains("pagination__next")) ++newPage
   else --newPage
 
-  emit("cange_page", {page: newPage})
+  emit("change_page", {page: newPage})
 }
 
 addListener((newText: Ref) => {
@@ -90,7 +90,7 @@ addListener((newText: Ref) => {
     font-size: 16px;
   }
 
-  &__contros {
+  &__controls {
     display: flex;
     align-items: center;
 

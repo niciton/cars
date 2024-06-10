@@ -1,6 +1,6 @@
 <template>
   <div class="page-home container">
-    <title-block title="erorr 404">
+    <title-block title="error 404">
     </title-block>
   </div>
 </template>

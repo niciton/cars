@@ -1,5 +1,5 @@
 <template>
-  <div :class="['app-select', {open: isShow}]" :style="`--min-width-text: ${minWidthText}px`">
+  <div :class="['app-select']" @click.stop="setSelect" :style="`--min-width-text: ${minWidthText}px`">
     <div class="app-select__arrow">
       <icons-main id="arrow" :size="24" />
     </div>
@@ -25,7 +25,6 @@
 </template>
 
 <script setup  lang="ts">
-// import { addListener } from '@/assets/helpers/helpers';
 
 export type TSelectItem = {
   id: number | string,
@@ -46,68 +45,47 @@ const emit = defineEmits<{
 // const { addListener } = useListenerStore();
 
 let activeSelect: Ref<number> = ref(props?.defaultSelectIndex || 0);
-let isShow: Ref<boolean> = ref(false);
 
-  var isAdd = false;
-
-if (process.browser && !isAdd) {
-  console.log(isAdd);
-  isAdd = true
-  console.log(isAdd);
-
-  console.log(674564);
-
-
-
-  function aa(event: Event) {
-    console.log(674564);
-    if (props.items.length < 1) return;
-
-    const selectTarget = (event.target as HTMLScriptElement).closest(".app-select");
-    const arrow = (event.target as HTMLScriptElement).closest(".app-select__arrow");
-
-    // if (!selectTarget) return closeOpenSelect();
-    if (arrow) return isShow.value = !isShow.value;
-    // setOpenSelect(event.target as HTMLScriptElement);
-
-    console.log("arrow");
-    const selectItem = (event.target as HTMLScriptElement).closest("[data-select-item]:not(.active)");
-
-    if (!selectItem) return;
-
-    // activeSelect.value = +(selectItem.getAttribute("data-select-item") as string);
-    // isShow.value = false;
-    console.log("selectItem");
-    // setSelectActive(event.target as HTMLScriptElement)
-
-    emit("select_change", props.items[activeSelect.value]);
-  }
-
-
-  document.body.removeEventListener("click", aa);
-
-  document.body.addEventListener("click", aa);
-
-
-
-
+function setSelect(event: Event) {
+  const selectTarget = (event.target as HTMLScriptElement).closest(".app-select");
+  const arrow = (event.target as HTMLScriptElement).closest(".app-select__arrow");
   
-  function setSelectActive(target: HTMLScriptElement) {
-    if (!target) return;
+  if (!selectTarget) return;
+  if (arrow) return selectTarget?.classList.toggle("open");
 
-    const selectParent = target.closest(".app-select");
-    const selectActiveSelect = selectParent?.querySelector(".app-select__active") as any;
-    const selectItem = (target as HTMLScriptElement).closest("[data-select-item]:not(.active)");
+  selectTarget.classList.add("open")
 
-    setTimeout(() => {
-      const activeSelectItem = selectParent?.querySelector("[data-select-item].active");
-      activeSelectItem?.classList.remove("active");
-    }, 0);
+  // const selectParent = (event.target as HTMLScriptElement).closest(".app-select");
+  const selectActiveSelect = selectTarget?.querySelector(".app-select__active") as any;
+  const selectItem = (event.target as HTMLScriptElement).closest("[data-select-item]:not(.active)");
 
-    selectItem?.classList.add("active");
+  if (!selectItem) return;
+
+  (() => {
+    const activeSelectItem = selectTarget?.querySelector("[data-select-item].active");
+    activeSelectItem?.classList.remove("active");
+    console.log(86756875);
+  })();
+  
+  activeSelect.value = +String(selectItem?.getAttribute("data-select-item"));
+
+  selectItem?.classList.add("active");
+  selectTarget?.classList.remove("open");
+  selectActiveSelect.setAttribute("data-select-active", activeSelect.value);
+  selectActiveSelect.innerHTML = selectItem?.innerHTML;
+  
+  emit("select_change", props.items[activeSelect.value]);
+}
+
+
+
+if (process.browser) {
+
+  document.body.addEventListener("click", (event: Event) => {
+    const selectParent = document.querySelector(".app-select");
     selectParent?.classList.remove("open");
-    selectActiveSelect.innerHTML = selectItem?.innerHTML;
-  }
+  });
+  
 
   function closeOpenSelect() {
     const selectParent = document.querySelector(".app-select");
